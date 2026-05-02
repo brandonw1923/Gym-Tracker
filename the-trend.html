@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="The Trend">
+<meta name="theme-color" content="#0d0e0f">
+<title>The Trend</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;600&family=Fraunces:ital,wght@0,400;0,600;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body {
+  margin: 0; padding: 0;
+  background: #050505;
+  color: #f5f5f4;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  overscroll-behavior-y: none;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+body {
+  background: radial-gradient(ellipse at top, #1a1d1f 0%, #0d0e0f 60%, #050505 100%);
+  background-attachment: fixed;
+}
+.display { font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.02em; }
+.editorial { font-family: 'Fraunces', serif; }
+.mono { font-family: 'JetBrains Mono', monospace; }
+
+.app { max-width: 720px; margin: 0 auto; padding-bottom: 100px; }
+.header {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(13,14,15,0.92);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid #292524;
+  padding: env(safe-area-inset-top) 0 0 0;
+}
+.header-inner { padding: 16px 20px 12px; }
+.brand { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.brand-1 { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: #10b981; letter-spacing: 0.02em; }
+.brand-2 { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: #f5f5f4; letter-spacing: 0.02em; }
+.brand-tag { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #78716c; text-transform: uppercase; letter-spacing: 0.15em; margin-left: 4px; }
+
+.nav {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 50;
+  background: rgba(13,14,15,0.95);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid #292524;
+  padding-bottom: env(safe-area-inset-bottom);
+  display: grid; grid-template-columns: repeat(3, 1fr);
+}
+.nav button {
+  background: none; border: none; color: #57534e;
+  padding: 14px 4px 12px; font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em;
+  cursor: pointer; transition: color 0.2s;
+  border-top: 2px solid transparent; margin-top: -1px;
+}
+.nav button.active { color: #f5f5f4; border-top-color: #10b981; }
+.nav button:active { background: rgba(16,185,129,0.05); }
+
+.section { padding: 24px 20px; }
+.section-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; color: #78716c;
+  text-transform: uppercase; letter-spacing: 0.2em;
+  margin-bottom: 6px;
+}
+.h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(48px, 12vw, 80px);
+  line-height: 0.85; letter-spacing: 0.01em;
+  margin: 0;
+}
+.accent { color: #10b981; }
+.subdued { color: #78716c; }
+
+/* ---------- Today log card ---------- */
+.log-hero { margin-bottom: 28px; }
+.hero-meta-row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+.eyebrow-mono { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #78716c; text-transform: uppercase; letter-spacing: 0.18em; }
+.log-grid {
+  display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 20px;
+}
+@media (min-width: 540px) { .log-grid { grid-template-columns: 1fr 1fr; } }
+
+.input-card {
+  border: 1px solid #292524;
+  background: rgba(12,10,9,0.5);
+  padding: 16px;
+}
+.input-label {
+  font-family: 'JetBrains Mono', monospace; font-size: 10px;
+  color: #78716c; text-transform: uppercase; letter-spacing: 0.2em;
+  margin-bottom: 6px;
+}
+.input-sub {
+  font-family: 'Fraunces', serif; font-style: italic; font-size: 11px;
+  color: #57534e; margin-top: 4px;
+}
+.input-row { display: flex; align-items: baseline; gap: 8px; }
+.big-input {
+  background: transparent;
+  border: none;
+  color: #f5f5f4;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 56px; line-height: 1;
+  width: 100%;
+  outline: none;
+  letter-spacing: 0.02em;
+  -webkit-appearance: none; -moz-appearance: textfield;
+}
+.big-input::-webkit-outer-spin-button,
+.big-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.unit {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  color: #78716c;
+  flex-shrink: 0;
+}
+.delta {
+  font-family: 'JetBrains Mono', monospace; font-size: 12px;
+  margin-top: 6px;
+}
+.delta.up { color: #ef4444; }
+.delta.down { color: #10b981; }
+.delta.same { color: #78716c; }
+
+/* notes */
+.notes-input {
+  width: 100%; background: #1c1917; border: 1px solid #292524;
+  color: #f5f5f4; font-family: 'JetBrains Mono', monospace; font-size: 13px;
+  padding: 10px; border-radius: 4px; outline: none; resize: vertical;
+  min-height: 60px;
+}
+.notes-input:focus { border-color: #10b981; }
+
+/* save indicator */
+.save-status {
+  font-family: 'JetBrains Mono', monospace; font-size: 10px;
+  color: #57534e; text-transform: uppercase; letter-spacing: 0.15em;
+  margin-top: 12px; text-align: center;
+}
+.save-status.saving { color: #f59e0b; }
+.save-status.saved { color: #10b981; }
+
+/* ---------- Stats grid (today summary) ---------- */
+.stats {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  margin-bottom: 20px;
+}
+.stat {
+  border: 1px solid #292524; background: rgba(12,10,9,0.4);
+  padding: 14px;
+}
+.stat-label {
+  font-family: 'JetBrains Mono', monospace; font-size: 9px;
+  color: #78716c; text-transform: uppercase; letter-spacing: 0.2em;
+}
+.stat-value {
+  font-family: 'Bebas Neue', sans-serif; font-size: 36px;
+  color: #f5f5f4; line-height: 1; margin-top: 4px;
+}
+.stat-sub {
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  color: #78716c; margin-top: 4px;
+}
+.stat-sub.up { color: #ef4444; }
+.stat-sub.down { color: #10b981; }
+
+/* ---------- Charts ---------- */
+.chart-card {
+  border: 1px solid #292524; background: rgba(12,10,9,0.4);
+  padding: 16px; margin-bottom: 16px;
+}
+.chart-title {
+  font-family: 'Bebas Neue', sans-serif; font-size: 22px;
+  color: #f5f5f4; margin-bottom: 4px;
+}
+.chart-sub {
+  font-family: 'JetBrains Mono', monospace; font-size: 10px;
+  color: #78716c; text-transform: uppercase; letter-spacing: 0.15em;
+  margin-bottom: 14px;
+}
+canvas { display: block; width: 100%; height: 220px; }
+.chart-empty { padding: 40px 20px; text-align: center; }
+.chart-empty p { font-family: 'Fraunces', serif; font-style: italic; color: #78716c; margin: 0; }
+
+.chart-legend {
+  display: flex; gap: 14px; flex-wrap: wrap; margin-top: 10px;
+  font-family: 'JetBrains Mono', monospace; font-size: 10px;
+  color: #a8a29e; text-transform: uppercase; letter-spacing: 0.1em;
+}
+.legend-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; vertical-align: 1px; }
+
+/* ---------- History ---------- */
+.history-list { border-top: 1px solid #292524; }
+.history-row {
+  width: 100%; background: none; border: none; cursor: pointer;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 8px; border-bottom: 1px solid #292524;
+  text-align: left; gap: 12px; flex-wrap: wrap;
+}
+.history-row:active { background: rgba(28,25,23,0.5); }
+.history-date { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #78716c; min-width: 110px; }
+.history-values { display: flex; gap: 16px; flex: 1; flex-wrap: wrap; }
+.history-val { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #d6d3d1; }
+.history-val.notes { color: #78716c; font-style: italic; font-family: 'Fraunces', serif; }
+.history-empty { text-align: center; padding: 60px 20px; border: 1px dashed #292524; }
+.history-empty p { font-family: 'Fraunces', serif; font-style: italic; color: #78716c; margin: 0; }
+
+/* ---------- Settings / data buttons ---------- */
+.settings-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 16px; }
+.btn {
+  background: transparent; border: 1px solid #44403c; color: #d6d3d1;
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  text-transform: uppercase; letter-spacing: 0.15em;
+  padding: 12px; cursor: pointer; border-radius: 4px;
+}
+.btn:active { background: #1c1917; }
+.btn.primary { border-color: #10b981; color: #10b981; }
+.btn.primary:active { background: rgba(16,185,129,0.08); }
+.btn.danger { color: #ef4444; border-color: rgba(239,68,68,0.3); }
+.btn.danger:active { background: rgba(127,29,29,0.1); }
+
+.divider { height: 1px; background: #292524; margin: 24px 0; }
+.italic-note {
+  font-family: 'Fraunces', serif; font-style: italic;
+  color: #a8a29e; line-height: 1.5;
+}
+.center-text { text-align: center; }
+
+/* Settings cards */
+.setting-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 0; border-bottom: 1px solid #292524;
+  gap: 12px;
+}
+.setting-label { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #d6d3d1; text-transform: uppercase; letter-spacing: 0.1em; }
+.setting-input {
+  background: #1c1917; border: 1px solid #292524; color: #f5f5f4;
+  font-family: 'JetBrains Mono', monospace; font-size: 14px;
+  padding: 8px 10px; border-radius: 4px; outline: none;
+  text-align: right; width: 90px;
+}
+.setting-input:focus { border-color: #10b981; }
+
+/* Toast */
+.toast {
+  position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
+  background: #1c1917; color: #f5f5f4; border: 1px solid #44403c;
+  padding: 10px 16px; border-radius: 6px;
+  font-family: 'JetBrains Mono', monospace; font-size: 12px;
+  z-index: 100; opacity: 0; pointer-events: none;
+  transition: opacity 0.25s, transform 0.25s;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(-4px); }
+
+/* Date input */
+input[type="date"] {
+  background: transparent; border: 1px solid #44403c; border-radius: 4px;
+  padding: 6px 10px; color: #d6d3d1; font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  color-scheme: dark; outline: none;
+}
+input[type="date"]:focus { border-color: #10b981; }
+.date-quick button {
+  background: transparent; border: 1px solid #292524; color: #78716c;
+  padding: 4px 8px; font-family: 'JetBrains Mono', monospace; font-size: 9px;
+  text-transform: uppercase; letter-spacing: 0.1em; border-radius: 3px;
+  cursor: pointer; margin-left: 6px;
+}
+.date-quick button:active { background: #1c1917; }
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+<nav class="nav" id="nav"></nav>
+<div class="toast" id="toast"></div>
+
+<script>
+// =====================================================================
+// INDEXEDDB
+// =====================================================================
+const DB_NAME = 'the-trend';
+const DB_VERSION = 1;
+const ENTRIES_STORE = 'entries';   // { date, weight, waist, notes }
+const SETTINGS_STORE = 'settings'; // { key, value }
+
+function openDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_NAME, DB_VERSION);
+    req.onupgradeneeded = () => {
+      const db = req.result;
+      if (!db.objectStoreNames.contains(ENTRIES_STORE)) {
+        db.createObjectStore(ENTRIES_STORE, { keyPath: 'date' });
+      }
+      if (!db.objectStoreNames.contains(SETTINGS_STORE)) {
+        db.createObjectStore(SETTINGS_STORE, { keyPath: 'key' });
+      }
+    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+async function dbGetAllEntries() {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(ENTRIES_STORE, 'readonly');
+    const req = tx.objectStore(ENTRIES_STORE).getAll();
+    req.onsuccess = () => {
+      const out = {};
+      for (const row of req.result) out[row.date] = row;
+      resolve(out);
+    };
+    req.onerror = () => reject(req.error);
+  });
+}
+
+async function dbPutEntry(record) {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(ENTRIES_STORE, 'readwrite');
+    tx.objectStore(ENTRIES_STORE).put(record);
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+async function dbDeleteEntry(date) {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(ENTRIES_STORE, 'readwrite');
+    tx.objectStore(ENTRIES_STORE).delete(date);
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+async function dbClearAll() {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction([ENTRIES_STORE, SETTINGS_STORE], 'readwrite');
+    tx.objectStore(ENTRIES_STORE).clear();
+    tx.objectStore(SETTINGS_STORE).clear();
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+async function dbGetSetting(key, fallback) {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(SETTINGS_STORE, 'readonly');
+    const req = tx.objectStore(SETTINGS_STORE).get(key);
+    req.onsuccess = () => resolve(req.result ? req.result.value : fallback);
+    req.onerror = () => resolve(fallback);
+  });
+}
+
+async function dbPutSetting(key, value) {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(SETTINGS_STORE, 'readwrite');
+    tx.objectStore(SETTINGS_STORE).put({ key, value });
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+// =====================================================================
+// HELPERS
+// =====================================================================
+const todayISO = () => {
+  const d = new Date();
+  const tz = d.getTimezoneOffset() * 60000;
+  return new Date(d - tz).toISOString().slice(0, 10);
+};
+const fmtDate = (iso) => {
+  const d = new Date(iso + 'T00:00:00');
+  return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+};
+const escapeHTML = (str) => String(str ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('show'), 2200);
+}
+
+// 7-day rolling average
+function rollingAverage(sortedEntries, key, windowSize = 7) {
+  const out = [];
+  for (let i = 0; i < sortedEntries.length; i++) {
+    const start = Math.max(0, i - windowSize + 1);
+    const slice = sortedEntries.slice(start, i + 1).filter((e) => typeof e[key] === 'number' && !isNaN(e[key]));
+    if (slice.length === 0) {
+      out.push(null);
+    } else {
+      const avg = slice.reduce((a, e) => a + e[key], 0) / slice.length;
+      out.push(avg);
+    }
+  }
+  return out;
+}
+
+// Linear regression slope (per day) — for trend per week
+function linearTrendPerWeek(sortedEntries, key) {
+  const points = sortedEntries
+    .map((e, i) => ({ x: i, y: e[key] }))
+    .filter((p) => typeof p.y === 'number' && !isNaN(p.y));
+  if (points.length < 2) return null;
+  const n = points.length;
+  const sumX = points.reduce((a, p) => a + p.x, 0);
+  const sumY = points.reduce((a, p) => a + p.y, 0);
+  const sumXY = points.reduce((a, p) => a + p.x * p.y, 0);
+  const sumXX = points.reduce((a, p) => a + p.x * p.x, 0);
+  const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+  return slope * 7; // per week
+}
+
+// =====================================================================
+// STATE
+// =====================================================================
+const state = {
+  view: 'today',
+  date: todayISO(),
+  entries: {},
+  settings: { goalWeight: null, startWeight: null },
+  saveStatus: 'idle', // idle | saving | saved
+  saveTimer: null,
+};
+
+async function init() {
+  state.entries = await dbGetAllEntries();
+  state.settings.goalWeight = await dbGetSetting('goalWeight', null);
+  state.settings.startWeight = await dbGetSetting('startWeight', null);
+  render();
+}
+
+function setView(v) { state.view = v; render(); }
+function setDate(d) { state.date = d; render(); }
+
+async function updateField(field, value) {
+  const dateKey = state.date;
+  const existing = state.entries[dateKey] || { date: dateKey };
+  const updated = { ...existing };
+  if (value === '' || value === null || value === undefined) {
+    delete updated[field];
+  } else {
+    updated[field] = field === 'notes' ? value : parseFloat(value);
+  }
+  state.entries[dateKey] = updated;
+  state.saveStatus = 'saving';
+  updateSaveStatusEl();
+  if (state.saveTimer) clearTimeout(state.saveTimer);
+  state.saveTimer = setTimeout(async () => {
+    if (Object.keys(updated).length === 1) {
+      // only date — empty entry, delete it
+      delete state.entries[dateKey];
+      await dbDeleteEntry(dateKey);
+    } else {
+      await dbPutEntry(updated);
+    }
+    state.saveStatus = 'saved';
+    updateSaveStatusEl();
+    setTimeout(() => {
+      state.saveStatus = 'idle';
+      updateSaveStatusEl();
+      // also refresh deltas (don't full re-render to preserve focus)
+      updateDeltas();
+    }, 800);
+  }, 400);
+}
+
+function updateSaveStatusEl() {
+  const el = document.querySelector('.save-status');
+  if (!el) return;
+  el.classList.remove('saving', 'saved');
+  if (state.saveStatus === 'saving') {
+    el.classList.add('saving');
+    el.textContent = '· Saving...';
+  } else if (state.saveStatus === 'saved') {
+    el.classList.add('saved');
+    el.textContent = '✓ Saved to device';
+  } else {
+    el.textContent = 'Auto-saves on change. Stays on this device.';
+  }
+}
+
+function updateDeltas() {
+  // Lightweight: just re-render today view
+  if (state.view === 'today') render();
+}
+
+// =====================================================================
+// EXPORT / IMPORT
+// =====================================================================
+function exportData() {
+  const data = {
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    entries: state.entries,
+    settings: state.settings,
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `trend-backup-${todayISO()}.json`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('Backup downloaded');
+}
+
+function importData() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'application/json,.json';
+  input.onchange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    try {
+      const text = await file.text();
+      const data = JSON.parse(text);
+      if (!data.entries) throw new Error('Invalid backup file');
+      if (!confirm('Replace all current data with this backup?')) return;
+      await dbClearAll();
+      for (const date in data.entries) {
+        await dbPutEntry({ ...data.entries[date], date });
+      }
+      if (data.settings) {
+        if (data.settings.goalWeight != null) await dbPutSetting('goalWeight', data.settings.goalWeight);
+        if (data.settings.startWeight != null) await dbPutSetting('startWeight', data.settings.startWeight);
+      }
+      state.entries = await dbGetAllEntries();
+      state.settings.goalWeight = await dbGetSetting('goalWeight', null);
+      state.settings.startWeight = await dbGetSetting('startWeight', null);
+      render();
+      showToast('Backup restored');
+    } catch (err) {
+      alert('Could not import: ' + err.message);
+    }
+  };
+  input.click();
+}
+
+async function clearAllData() {
+  if (!confirm('Delete ALL data? This cannot be undone.')) return;
+  if (!confirm('Are you really sure? Export a backup first if you want to keep it.')) return;
+  await dbClearAll();
+  state.entries = {};
+  state.settings = { goalWeight: null, startWeight: null };
+  render();
+  showToast('All data cleared');
+}
+
+// =====================================================================
+// RENDER
+// =====================================================================
+function render() {
+  document.getElementById('app').innerHTML = renderHeader() + renderMain();
+  document.getElementById('nav').innerHTML = renderNav();
+  attachListeners();
+}
+
+function renderHeader() {
+  return `
+    <header class="header">
+      <div class="header-inner">
+        <div class="brand">
+          <span class="brand-1">THE</span>
+          <span class="brand-2">TREND</span>
+          <span class="brand-tag">Recomp · Cutting</span>
+        </div>
+      </div>
+    </header>
+  `;
+}
+
+function renderNav() {
+  const tabs = [
+    { id: 'today', label: 'Log' },
+    { id: 'trend', label: 'Trend' },
+    { id: 'settings', label: 'Data' },
+  ];
+  return tabs.map((t) => `
+    <button data-nav="${t.id}" class="${state.view === t.id ? 'active' : ''}">${t.label}</button>
+  `).join('');
+}
+
+function renderMain() {
+  switch (state.view) {
+    case 'today': return renderToday();
+    case 'trend': return renderTrend();
+    case 'settings': return renderSettings();
+    default: return '';
+  }
+}
+
+// =====================================================================
+// TODAY (LOG)
+// =====================================================================
+function renderToday() {
+  const isToday = state.date === todayISO();
+  const entry = state.entries[state.date] || {};
+
+  // previous day's values (for delta)
+  const sortedDates = Object.keys(state.entries).sort();
+  const idxOfCurrent = sortedDates.indexOf(state.date);
+  const prevDate = idxOfCurrent > 0 ? sortedDates[idxOfCurrent - 1]
+    : sortedDates.filter((d) => d < state.date).slice(-1)[0];
+  const prev = prevDate ? state.entries[prevDate] : null;
+
+  function deltaHtml(field, suffix = 'lb') {
+    if (!prev || typeof prev[field] !== 'number' || typeof entry[field] !== 'number') return '';
+    const d = entry[field] - prev[field];
+    if (Math.abs(d) < 0.05) return `<div class="delta same">— no change vs ${fmtDate(prevDate)}</div>`;
+    const cls = d > 0 ? 'up' : 'down';
+    const arrow = d > 0 ? '▲' : '▼';
+    return `<div class="delta ${cls}">${arrow} ${Math.abs(d).toFixed(1)} ${suffix} vs ${fmtDate(prevDate)}</div>`;
+  }
+
+  return `
+    <section class="section">
+      <div class="hero-meta-row">
+        <div class="eyebrow-mono">${fmtDate(state.date)} · ${isToday ? "Today's log" : 'Daily log'}</div>
+        <div>
+          <input type="date" id="dateInput" value="${state.date}">
+          ${!isToday ? '<span class="date-quick"><button data-action="today">Today</button></span>' : ''}
+        </div>
+      </div>
+      <h1 class="h1">DAILY<span class="accent">.</span></h1>
+      <p class="italic-note" style="margin-top: 8px;">Weigh first thing after the bathroom, before food or drink. Same time, same scale.</p>
+
+      <div class="log-grid">
+        <div class="input-card">
+          <div class="input-label">Weight</div>
+          <div class="input-row">
+            <input type="number" inputmode="decimal" step="0.1" class="big-input"
+              placeholder="—" value="${entry.weight ?? ''}" data-field="weight">
+            <span class="unit">lb</span>
+          </div>
+          <div class="input-sub">Bathroom scale, every morning</div>
+          ${deltaHtml('weight', 'lb')}
+        </div>
+
+        <div class="input-card">
+          <div class="input-label">Waist</div>
+          <div class="input-row">
+            <input type="number" inputmode="decimal" step="0.1" class="big-input"
+              placeholder="—" value="${entry.waist ?? ''}" data-field="waist">
+            <span class="unit">in</span>
+          </div>
+          <div class="input-sub">Around the navel, relaxed exhale</div>
+          ${deltaHtml('waist', 'in')}
+        </div>
+      </div>
+
+      <div style="margin-top: 16px;">
+        <div class="input-label" style="margin-bottom: 6px;">Notes (optional)</div>
+        <textarea class="notes-input" data-field="notes"
+          placeholder="Slept well, light dinner, walked 40 min...">${escapeHTML(entry.notes ?? '')}</textarea>
+      </div>
+
+      <div class="save-status">Auto-saves on change. Stays on this device.</div>
+
+      ${renderTodaySummary()}
+    </section>
+  `;
+}
+
+function renderTodaySummary() {
+  const sorted = Object.values(state.entries)
+    .filter((e) => typeof e.weight === 'number')
+    .sort((a, b) => (a.date < b.date ? -1 : 1));
+
+  if (sorted.length < 2) {
+    return '';
+  }
+
+  // 7-day rolling avg of latest
+  const weightAvgs = rollingAverage(sorted, 'weight', 7);
+  const latestAvg = weightAvgs[weightAvgs.length - 1];
+
+  // Compare to 7 days prior's rolling avg
+  const sevenAgoIdx = Math.max(0, sorted.length - 8);
+  const priorAvg = weightAvgs[sevenAgoIdx];
+  const weeklyChange = (latestAvg != null && priorAvg != null) ? latestAvg - priorAvg : null;
+
+  // Trend per week (linear regression over all data)
+  const trendPerWeek = linearTrendPerWeek(sorted, 'weight');
+
+  // total change since first entry
+  const firstWeight = sorted[0].weight;
+  const latestWeight = sorted[sorted.length - 1].weight;
+  const totalChange = latestWeight - firstWeight;
+
+  // start weight setting (if user defined a separate baseline)
+  const baseline = state.settings.startWeight ?? firstWeight;
+  const sinceBaseline = latestWeight - baseline;
+
+  return `
+    <div class="divider"></div>
+    <div class="section-eyebrow">Quick stats</div>
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-label">7-day average</div>
+        <div class="stat-value">${latestAvg ? latestAvg.toFixed(1) : '—'} <span style="font-size: 14px; color: #78716c; font-family: 'JetBrains Mono', monospace;">lb</span></div>
+        ${weeklyChange != null ? `
+          <div class="stat-sub ${weeklyChange < 0 ? 'down' : weeklyChange > 0 ? 'up' : ''}">
+            ${weeklyChange < 0 ? '▼' : weeklyChange > 0 ? '▲' : '—'} ${Math.abs(weeklyChange).toFixed(2)} lb / week
+          </div>` : ''}
+      </div>
+      <div class="stat">
+        <div class="stat-label">Linear trend</div>
+        <div class="stat-value">${trendPerWeek != null ? (trendPerWeek > 0 ? '+' : '') + trendPerWeek.toFixed(2) : '—'} <span style="font-size: 14px; color: #78716c; font-family: 'JetBrains Mono', monospace;">lb/wk</span></div>
+        <div class="stat-sub">All-time fit</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Since start</div>
+        <div class="stat-value">${(sinceBaseline > 0 ? '+' : '') + sinceBaseline.toFixed(1)} <span style="font-size: 14px; color: #78716c; font-family: 'JetBrains Mono', monospace;">lb</span></div>
+        <div class="stat-sub">From ${baseline.toFixed(1)} lb</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Goal</div>
+        <div class="stat-value">${state.settings.goalWeight ? state.settings.goalWeight.toFixed(0) : '—'} <span style="font-size: 14px; color: #78716c; font-family: 'JetBrains Mono', monospace;">lb</span></div>
+        <div class="stat-sub">${state.settings.goalWeight ? (state.settings.goalWeight - latestWeight).toFixed(1) + ' lb to go' : 'Set in Data tab'}</div>
+      </div>
+    </div>
+
+    <p class="italic-note" style="font-size: 13px; margin-top: 14px;">
+      The 7-day average is the only number that tells the truth. Daily weight is mostly water and food in transit.
+    </p>
+  `;
+}
+
+// =====================================================================
+// TREND VIEW
+// =====================================================================
+function renderTrend() {
+  const sortedAll = Object.values(state.entries).sort((a, b) => (a.date < b.date ? -1 : 1));
+  const weightSeries = sortedAll.filter((e) => typeof e.weight === 'number');
+  const waistSeries = sortedAll.filter((e) => typeof e.waist === 'number');
+
+  setTimeout(() => {
+    drawTrendChart('weight-chart', weightSeries, 'weight', '#10b981', 'lb');
+    drawTrendChart('waist-chart', waistSeries, 'waist', '#a8a29e', 'in');
+  }, 0);
+
+  return `
+    <section class="section">
+      <div class="section-eyebrow">The signal vs the noise</div>
+      <h1 class="h1">TREND<span class="accent">.</span></h1>
+      <p class="italic-note" style="margin-top: 8px;">
+        Daily readings bounce 2-4 lb on water alone. The 7-day rolling average is what's actually changing.
+      </p>
+
+      <div style="margin-top: 24px;">
+        <div class="chart-card">
+          <div class="chart-title">Bodyweight</div>
+          <div class="chart-sub">Daily readings + 7-day rolling average</div>
+          ${weightSeries.length === 0
+            ? '<div class="chart-empty"><p>Log a few days to see your trend.</p></div>'
+            : weightSeries.length < 2
+            ? '<div class="chart-empty"><p>One more entry and the chart appears.</p></div>'
+            : `<canvas id="weight-chart"></canvas>
+               <div class="chart-legend">
+                 <span><span class="legend-dot" style="background:#52525b;"></span>Daily</span>
+                 <span><span class="legend-dot" style="background:#10b981;"></span>7-day average</span>
+                 ${state.settings.goalWeight ? '<span><span class="legend-dot" style="background:#f59e0b;"></span>Goal</span>' : ''}
+               </div>`
+          }
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-title">Waist</div>
+          <div class="chart-sub">Daily + 7-day average · the honest measure of fat loss</div>
+          ${waistSeries.length === 0
+            ? '<div class="chart-empty"><p>Add waist measurements to see fat-loss trend.</p></div>'
+            : waistSeries.length < 2
+            ? '<div class="chart-empty"><p>One more entry and the chart appears.</p></div>'
+            : `<canvas id="waist-chart"></canvas>
+               <div class="chart-legend">
+                 <span><span class="legend-dot" style="background:#52525b;"></span>Daily</span>
+                 <span><span class="legend-dot" style="background:#a8a29e;"></span>7-day average</span>
+               </div>`
+          }
+        </div>
+      </div>
+
+      ${renderRecentLog()}
+    </section>
+  `;
+}
+
+function renderRecentLog() {
+  const entries = Object.values(state.entries)
+    .sort((a, b) => (a.date < b.date ? 1 : -1))
+    .slice(0, 14);
+
+  if (entries.length === 0) {
+    return '';
+  }
+
+  return `
+    <div class="divider"></div>
+    <div class="section-eyebrow">Recent entries</div>
+    <div class="history-list" style="margin-top: 8px;">
+      ${entries.map((e) => `
+        <button class="history-row" data-history-date="${e.date}">
+          <div class="history-date">${fmtDate(e.date)}</div>
+          <div class="history-values">
+            ${typeof e.weight === 'number' ? `<span class="history-val">${e.weight.toFixed(1)} lb</span>` : ''}
+            ${typeof e.waist === 'number' ? `<span class="history-val">${e.waist.toFixed(1)} in</span>` : ''}
+            ${e.notes ? `<span class="history-val notes">"${escapeHTML(e.notes.length > 40 ? e.notes.slice(0, 40) + '…' : e.notes)}"</span>` : ''}
+          </div>
+        </button>
+      `).join('')}
+    </div>
+  `;
+}
+
+// =====================================================================
+// SETTINGS / DATA
+// =====================================================================
+function renderSettings() {
+  const sorted = Object.values(state.entries).filter((e) => typeof e.weight === 'number').sort((a,b) => a.date < b.date ? -1 : 1);
+  const totalEntries = Object.keys(state.entries).length;
+  const firstDate = sorted.length ? sorted[0].date : null;
+  const daysTracking = firstDate ? Math.floor((new Date(todayISO()) - new Date(firstDate)) / 86400000) + 1 : 0;
+
+  return `
+    <section class="section">
+      <div class="section-eyebrow">Goals & data</div>
+      <h1 class="h1">DATA<span class="accent">.</span></h1>
+
+      <div style="margin-top: 24px;">
+        <div class="section-eyebrow">Goals</div>
+        <div class="setting-row">
+          <div>
+            <div class="setting-label">Starting weight</div>
+            <div class="input-sub">Optional. If empty, uses first logged entry.</div>
+          </div>
+          <input type="number" inputmode="decimal" step="0.1" class="setting-input"
+            placeholder="—" value="${state.settings.startWeight ?? ''}" data-setting="startWeight">
+        </div>
+        <div class="setting-row">
+          <div>
+            <div class="setting-label">Goal weight</div>
+            <div class="input-sub">Target for the cut.</div>
+          </div>
+          <input type="number" inputmode="decimal" step="1" class="setting-input"
+            placeholder="—" value="${state.settings.goalWeight ?? ''}" data-setting="goalWeight">
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="section-eyebrow">Stats</div>
+      <div class="stats" style="margin-top: 12px;">
+        <div class="stat">
+          <div class="stat-label">Total entries</div>
+          <div class="stat-value">${totalEntries}</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Days tracking</div>
+          <div class="stat-value">${daysTracking}</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="section-eyebrow">Backup</div>
+      <p class="italic-note" style="font-size: 13px;">
+        Data lives in your phone's storage. Export periodically — losing months of tracking would suck.
+      </p>
+      <div class="settings-actions">
+        <button class="btn primary" data-action="export">Export Backup</button>
+        <button class="btn" data-action="import">Import Backup</button>
+      </div>
+      <div style="margin-top: 8px;">
+        <button class="btn danger" data-action="clear-all" style="width: 100%;">Delete All Data</button>
+      </div>
+    </section>
+  `;
+}
+
+// =====================================================================
+// CHART
+// =====================================================================
+function drawTrendChart(canvasId, data, key, primaryColor, unitLabel) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas || data.length < 2) return;
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * dpr;
+  canvas.height = 220 * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  const W = rect.width, H = 220;
+  const padL = 42, padR = 16, padT = 12, padB = 28;
+  const innerW = W - padL - padR, innerH = H - padT - padB;
+
+  const sorted = data.sort((a, b) => (a.date < b.date ? -1 : 1));
+  const rollingAvg = rollingAverage(sorted, key, 7);
+
+  // Y bounds
+  const allVals = sorted.map((e) => e[key]).concat(rollingAvg.filter((v) => v != null));
+  const goal = (key === 'weight' && state.settings.goalWeight) ? state.settings.goalWeight : null;
+  if (goal) allVals.push(goal);
+  if (allVals.length === 0) return;
+  const minV = Math.min(...allVals);
+  const maxV = Math.max(...allVals);
+  const range = maxV - minV || 1;
+  const yPad = range * 0.1;
+  const yMin = minV - yPad;
+  const yMax = maxV + yPad;
+  const yRange = yMax - yMin || 1;
+
+  const xFor = (i) => padL + (sorted.length === 1 ? innerW / 2 : (i / (sorted.length - 1)) * innerW);
+  const yFor = (v) => padT + innerH - ((v - yMin) / yRange) * innerH;
+
+  // Grid
+  ctx.strokeStyle = '#27272a';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([3, 3]);
+  for (let i = 0; i <= 4; i++) {
+    const y = padT + (i / 4) * innerH;
+    ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(W - padR, y); ctx.stroke();
+  }
+  ctx.setLineDash([]);
+
+  // Y-labels
+  ctx.fillStyle = '#71717a';
+  ctx.font = '10px "JetBrains Mono", monospace';
+  ctx.textAlign = 'right';
+  for (let i = 0; i <= 4; i++) {
+    const v = yMax - (i / 4) * yRange;
+    const y = padT + (i / 4) * innerH;
+    ctx.fillText(v.toFixed(key === 'waist' ? 1 : 0), padL - 6, y + 3);
+  }
+
+  // X-labels
+  ctx.textAlign = 'center';
+  const xTickCount = Math.min(sorted.length, 5);
+  for (let i = 0; i < xTickCount; i++) {
+    const idx = Math.round((i / (xTickCount - 1 || 1)) * (sorted.length - 1));
+    const x = xFor(idx);
+    ctx.fillText(sorted[idx].date.slice(5), x, H - 8);
+  }
+
+  // Goal line
+  if (goal != null) {
+    ctx.strokeStyle = '#f59e0b';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([6, 4]);
+    const gy = yFor(goal);
+    ctx.beginPath();
+    ctx.moveTo(padL, gy);
+    ctx.lineTo(W - padR, gy);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#f59e0b';
+    ctx.font = 'bold 9px "JetBrains Mono", monospace';
+    ctx.textAlign = 'left';
+    ctx.fillText('GOAL ' + goal, padL + 4, gy - 4);
+  }
+
+  // Daily dots (faint connector)
+  ctx.strokeStyle = '#52525b';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  sorted.forEach((d, i) => {
+    const x = xFor(i), y = yFor(d[key]);
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  });
+  ctx.stroke();
+  ctx.fillStyle = '#52525b';
+  sorted.forEach((d, i) => {
+    const x = xFor(i), y = yFor(d[key]);
+    ctx.beginPath(); ctx.arc(x, y, 2.5, 0, Math.PI * 2); ctx.fill();
+  });
+
+  // Rolling average — bold
+  ctx.strokeStyle = primaryColor;
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  let started = false;
+  rollingAvg.forEach((v, i) => {
+    if (v == null) return;
+    const x = xFor(i), y = yFor(v);
+    if (!started) { ctx.moveTo(x, y); started = true; }
+    else ctx.lineTo(x, y);
+  });
+  ctx.stroke();
+}
+
+// =====================================================================
+// EVENT LISTENERS
+// =====================================================================
+function attachListeners() {
+  document.querySelectorAll('[data-nav]').forEach((b) => {
+    b.onclick = () => setView(b.dataset.nav);
+  });
+  const dateInput = document.getElementById('dateInput');
+  if (dateInput) dateInput.onchange = (e) => setDate(e.target.value);
+  document.querySelectorAll('[data-action="today"]').forEach((b) => b.onclick = () => setDate(todayISO()));
+
+  document.querySelectorAll('[data-field]').forEach((input) => {
+    input.oninput = (e) => updateField(input.dataset.field, input.value);
+  });
+
+  document.querySelectorAll('[data-history-date]').forEach((row) => {
+    row.onclick = () => { setDate(row.dataset.historyDate); setView('today'); };
+  });
+
+  document.querySelectorAll('[data-setting]').forEach((input) => {
+    input.oninput = async (e) => {
+      const key = input.dataset.setting;
+      const val = input.value === '' ? null : parseFloat(input.value);
+      state.settings[key] = val;
+      if (val == null) {
+        await dbPutSetting(key, null);
+      } else {
+        await dbPutSetting(key, val);
+      }
+    };
+  });
+
+  document.querySelectorAll('[data-action="export"]').forEach((b) => b.onclick = exportData);
+  document.querySelectorAll('[data-action="import"]').forEach((b) => b.onclick = importData);
+  document.querySelectorAll('[data-action="clear-all"]').forEach((b) => b.onclick = clearAllData);
+}
+
+// =====================================================================
+// LAUNCH
+// =====================================================================
+init();
+</script>
+</body>
+</html>
